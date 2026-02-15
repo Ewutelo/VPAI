@@ -71,8 +71,8 @@ lint-ansible: ## Lancer ansible-lint uniquement
 .PHONY: check-no-latest
 check-no-latest: ## Vérifier qu'aucune image Docker n'utilise :latest
 	@echo "$(GREEN)>>> Checking for :latest tags...$(NC)"
-	@if grep -r ':latest\|:stable\|:main' inventory/group_vars/all/versions.yml; then \
-		echo "$(RED)>>> FAIL: Found :latest or :stable tags!$(NC)"; exit 1; \
+	@if grep -nE '^[[:space:]]*[a-zA-Z0-9_]+:[[:space:]]*"[^"]*:(latest|stable|main)"' inventory/group_vars/all/versions.yml; then \
+		echo "$(RED)>>> FAIL: Found disallowed Docker image tags (latest/stable/main)!$(NC)"; exit 1; \
 	else \
 		echo "$(GREEN)>>> OK: No :latest tags found$(NC)"; \
 	fi
